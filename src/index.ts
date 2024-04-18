@@ -1,4 +1,5 @@
 import dotenv from 'dotenv'
+
 import FeedGenerator from './server'
 
 const run = async () => {
@@ -38,4 +39,4 @@ const maybeInt = (val?: string) => {
   return int
 }
 
-run()
+void run()

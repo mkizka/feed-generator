@@ -1,5 +1,6 @@
 import express from 'express'
-import { AppContext } from './config'
+
+import type { AppContext } from './config'
 
 const makeRouter = (ctx: AppContext) => {
   const router = express.Router()

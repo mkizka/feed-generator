@@ -1,6 +1,6 @@
+import { AtpAgent } from '@atproto/api'
 import dotenv from 'dotenv'
-import { AtpAgent, BlobRef } from '@atproto/api'
-import fs from 'fs/promises'
+
 import { ids } from '../src/lexicon/lexicons'
 
 const required = (value: string | undefined) => {
@@ -43,4 +43,4 @@ const run = async () => {
   console.log('All done 🎉')
 }
 
-run()
+void run()

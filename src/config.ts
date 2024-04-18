@@ -1,5 +1,6 @@
-import { Database } from './db'
-import { DidResolver } from '@atproto/identity'
+import type { DidResolver } from '@atproto/identity'
+
+import type { Database } from './db'
 
 export type AppContext = {
   db: Database

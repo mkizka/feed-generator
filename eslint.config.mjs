@@ -1,3 +1,8 @@
-import { mkizka } from "@mkizka/eslint-config";
+import { mkizka } from '@mkizka/eslint-config'
 
-export default mkizka();
+export default [
+  {
+    ignores: ['src/lexicon/', 'dist'],
+  },
+  ...mkizka(),
+]

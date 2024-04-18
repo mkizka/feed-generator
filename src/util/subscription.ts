@@ -1,22 +1,26 @@
-import { Subscription } from '@atproto/xrpc-server'
-import { cborToLexRecord, readCar } from '@atproto/repo'
 import { BlobRef } from '@atproto/lexicon'
+import { cborToLexRecord, readCar } from '@atproto/repo'
+import { Subscription } from '@atproto/xrpc-server'
+
+import type { Database } from '../db'
 import { ids, lexicons } from '../lexicon/lexicons'
-import { Record as PostRecord } from '../lexicon/types/app/bsky/feed/post'
-import { Record as RepostRecord } from '../lexicon/types/app/bsky/feed/repost'
-import { Record as LikeRecord } from '../lexicon/types/app/bsky/feed/like'
-import { Record as FollowRecord } from '../lexicon/types/app/bsky/graph/follow'
-import {
+import type { Record as LikeRecord } from '../lexicon/types/app/bsky/feed/like'
+import type { Record as PostRecord } from '../lexicon/types/app/bsky/feed/post'
+import type { Record as RepostRecord } from '../lexicon/types/app/bsky/feed/repost'
+import type { Record as FollowRecord } from '../lexicon/types/app/bsky/graph/follow'
+import type {
   Commit,
   OutputSchema as RepoEvent,
-  isCommit,
 } from '../lexicon/types/com/atproto/sync/subscribeRepos'
-import { Database } from '../db'
+import { isCommit } from '../lexicon/types/com/atproto/sync/subscribeRepos'
 
 export abstract class FirehoseSubscriptionBase {
   public sub: Subscription<RepoEvent>
 
-  constructor(public db: Database, public service: string) {
+  constructor(
+    public db: Database,
+    public service: string,
+  ) {
     this.sub = new Subscription({
       service: service,
       method: ids.ComAtprotoSyncSubscribeRepos,
@@ -51,7 +55,10 @@ export abstract class FirehoseSubscriptionBase {
       }
     } catch (err) {
       console.error('repo subscription errored', err)
-      setTimeout(() => this.run(subscriptionReconnectDelay), subscriptionReconnectDelay)
+      setTimeout(
+        () => this.run(subscriptionReconnectDelay),
+        subscriptionReconnectDelay,
+      )
     }
   }
 
@@ -182,9 +189,12 @@ const fixBlobRefs = (obj: unknown): unknown => {
       const blob = obj as BlobRef
       return new BlobRef(blob.ref, blob.mimeType, blob.size, blob.original)
     }
-    return Object.entries(obj).reduce((acc, [key, val]) => {
-      return Object.assign(acc, { [key]: fixBlobRefs(val) })
-    }, {} as Record<string, unknown>)
+    return Object.entries(obj).reduce(
+      (acc, [key, val]) => {
+        return Object.assign(acc, { [key]: fixBlobRefs(val) })
+      },
+      {} as Record<string, unknown>,
+    )
   }
   return obj
 }

@@ -1,13 +1,15 @@
-import http from 'http'
+import { DidResolver, MemoryCache } from '@atproto/identity'
 import events from 'events'
 import express from 'express'
-import { DidResolver, MemoryCache } from '@atproto/identity'
+import type http from 'http'
+
+import type { AppContext, Config } from './config'
+import type { Database } from './db'
+import { createDb, migrateToLatest } from './db'
 import { createServer } from './lexicon'
-import feedGeneration from './methods/feed-generation'
 import describeGenerator from './methods/describe-generator'
-import { createDb, Database, migrateToLatest } from './db'
+import feedGeneration from './methods/feed-generation'
 import { FirehoseSubscription } from './subscription'
-import { AppContext, Config } from './config'
 import wellKnown from './well-known'
 
 export class FeedGenerator {
@@ -63,7 +65,7 @@ export class FeedGenerator {
 
   async start(): Promise<http.Server> {
     await migrateToLatest(this.db)
-    this.firehose.run(this.cfg.subscriptionReconnectDelay)
+    void this.firehose.run(this.cfg.subscriptionReconnectDelay)
     this.server = this.app.listen(this.cfg.port, this.cfg.listenhost)
     await events.once(this.server, 'listening')
     return this.server

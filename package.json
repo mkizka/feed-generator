@@ -9,6 +9,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "format": "prettier --write . && eslint --fix .",
     "prepare": "husky",
     "publishFeed": "ts-node scripts/publishFeedGen.ts",
     "start": "ts-node src/index.ts",
@@ -45,11 +46,6 @@
     "*": [
       "prettier --ignore-unknown --write",
       "eslint --fix"
-    ]
-  },
-  "prettier": {
-    "plugins": [
-      "prettier-plugin-pkg"
     ]
   }
 }
