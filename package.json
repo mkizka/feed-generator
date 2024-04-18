@@ -31,5 +31,6 @@
     "@types/node": "^20.1.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
-  }
+  },
+  "packageManager": "pnpm@9.0.2+sha256.d6fc013639b81658ff175829ebb9435bcb89eff206769e460fd3ae27c2054df6"
 }
