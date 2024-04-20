@@ -10,7 +10,10 @@
     "allowUnreachableCode": false,
     "strictNullChecks": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]

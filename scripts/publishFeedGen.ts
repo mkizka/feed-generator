@@ -3,7 +3,7 @@ import { AtpAgent } from '@atproto/api'
 import dotenv from 'dotenv'
 import fs from 'fs/promises'
 
-import { ids } from '../src/lexicon/lexicons'
+import { ids } from '@/lexicon/lexicons'
 
 const required = (value: string | undefined) => {
   if (!value) {

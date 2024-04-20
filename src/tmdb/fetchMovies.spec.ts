@@ -2,7 +2,8 @@ import { http, HttpResponse } from 'msw'
 import { err, ok } from 'neverthrow'
 import { describe, expect, test, vi } from 'vitest'
 
-import { server } from '../mocks/server'
+import { server } from '@/mocks/server'
+
 import { fetchRecentMoviesInJapan } from './fetchMovies'
 
 const dummyTMDBHandler = (dummyMovies: unknown[][]) => {

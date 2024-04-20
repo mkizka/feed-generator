@@ -1,6 +1,6 @@
 import { err, ok, ResultAsync } from 'neverthrow'
 
-import { env } from '../util/env'
+import { env } from '@/util/env'
 
 type TMDBMovie = {
   adult: boolean

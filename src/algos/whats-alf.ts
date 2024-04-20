@@ -1,7 +1,7 @@
 import { InvalidRequestError } from '@atproto/xrpc-server'
 
-import type { AppContext } from '../config'
-import type { QueryParams } from '../lexicon/types/app/bsky/feed/getFeedSkeleton'
+import type { AppContext } from '@/config'
+import type { QueryParams } from '@/lexicon/types/app/bsky/feed/getFeedSkeleton'
 
 // max 15 chars
 export const shortname = 'whats-alf'
