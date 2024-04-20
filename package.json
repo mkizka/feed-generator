@@ -1,12 +1,12 @@
 {
-  "name": "feed-generator",
+  "name": "@mkizka/feed-generator",
   "version": "1.0.0",
-  "description": "atproto feed generator starter kit",
-  "repository": "git@github.com:bluesky-social/feed-generator.git",
-  "author": "dholms <dtholmgren@gmail.com>",
   "license": "MIT",
+  "private": true,
   "packageManager": "pnpm@9.0.2+sha256.d6fc013639b81658ff175829ebb9435bcb89eff206769e460fd3ae27c2054df6",
-  "main": "index.js",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "NODE_ENV=development tsx --watch src/index.ts",
     "format": "prettier --write . && eslint --fix .",
