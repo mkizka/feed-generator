@@ -36,7 +36,7 @@ const fetchRecentMoviesInJapanByPage = async (page: number) => {
         Authorization: `Bearer ${env.TMDB_AUTH_TOKEN}`,
       },
     }),
-    (error: Error) => new Error(`TMDB APIエラー(${error.message})`),
+    (error) => new Error(`TMDB APIエラー`, { cause: error }),
   ).andThen((response) => {
     if (!response.ok) {
       return err(

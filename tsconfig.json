@@ -1,20 +1,10 @@
 {
+  "extends": "@tsconfig/node20/tsconfig.json",
   "compilerOptions": {
-    "lib": ["ESNext"],
-    "outDir": "dist",
-    "module": "CommonJS",
-    "target": "ES6",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "alwaysStrict": true,
-    "allowUnreachableCode": false,
-    "strictNullChecks": true,
-    "skipLibCheck": true,
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["**/*.ts"]
 }
