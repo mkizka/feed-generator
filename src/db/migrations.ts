@@ -3,6 +3,7 @@ import type { Kysely, Migration, MigrationProvider } from 'kysely'
 const migrations: Record<string, Migration> = {}
 
 export const migrationProvider: MigrationProvider = {
+  // eslint-disable-next-line @typescript-eslint/require-await
   async getMigrations() {
     return migrations
   },

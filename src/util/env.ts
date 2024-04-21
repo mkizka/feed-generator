@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import { z } from 'zod'
+import { z, ZodError } from 'zod'
 import { fromZodError } from 'zod-validation-error'
 
 const envSchema = z.object({
@@ -15,6 +15,10 @@ export const env = (() => {
   try {
     return envSchema.parse(process.env)
   } catch (err) {
-    throw fromZodError(err)
+    if (err instanceof ZodError) {
+      throw fromZodError(err)
+    } else {
+      throw err
+    }
   }
 })()

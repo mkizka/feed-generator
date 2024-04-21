@@ -5,7 +5,7 @@ import type { AppContext } from '@/config'
 import type { Server } from '@/lexicon'
 
 export default function (server: Server, ctx: AppContext) {
-  server.app.bsky.feed.describeFeedGenerator(async () => {
+  server.app.bsky.feed.describeFeedGenerator(() => {
     const feeds = Object.keys(algos).map((shortname) => ({
       uri: AtUri.make(
         ctx.cfg.publisherDid,

@@ -34,7 +34,7 @@
     "zod-validation-error": "^3.1.0"
   },
   "devDependencies": {
-    "@mkizka/eslint-config": "^4.1.0",
+    "@mkizka/eslint-config": "^4.2.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/better-sqlite3": "^7.6.4",
     "@types/express": "^4.17.17",

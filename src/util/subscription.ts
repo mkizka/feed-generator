@@ -56,6 +56,7 @@ export abstract class FirehoseSubscriptionBase {
     } catch (err) {
       console.error('repo subscription errored', err)
       setTimeout(
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         () => this.run(subscriptionReconnectDelay),
         subscriptionReconnectDelay,
       )

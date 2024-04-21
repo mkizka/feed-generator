@@ -73,7 +73,7 @@ describe('fetchMovies', () => {
         title: '映画1',
         release_date: '2021-01-01',
       },
-    ])
+    ]) as unknown[][]
     server.use(dummyTMDBHandler(dummyMovies))
     // act
     const response = await fetchRecentMoviesInJapan()
