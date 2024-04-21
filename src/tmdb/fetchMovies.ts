@@ -1,4 +1,5 @@
 import { err, ok, ResultAsync } from 'neverthrow'
+import { setTimeout } from 'timers/promises'
 
 import { env } from '@/util/env'
 
@@ -65,16 +66,20 @@ const fetchRecentMoviesInJapanByPage = async (page: number) => {
 const MAX_PAGINATION = 10
 
 export const fetchRecentMoviesInJapan = async () => {
+  let page = 1
   const movies: TMDBMovie[] = []
-  for (let page = 1; page <= MAX_PAGINATION; page++) {
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
     const response = await fetchRecentMoviesInJapanByPage(page)
     if (response.isErr()) {
       return err(response.error)
     }
     movies.push(...response.value.results)
-    if (page >= response.value.total_pages) {
+    if (page >= MAX_PAGINATION || page >= response.value.total_pages) {
       break
     }
+    page = response.value.page + 1
+    await setTimeout(1000) // 連続でリクエストしないように1秒待つ
   }
   return ok(movies)
 }

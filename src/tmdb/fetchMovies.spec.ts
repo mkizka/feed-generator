@@ -1,10 +1,14 @@
 import { http, HttpResponse } from 'msw'
 import { err, ok } from 'neverthrow'
+import { setTimeout } from 'timers/promises'
 import { describe, expect, test, vi } from 'vitest'
 
 import { server } from '@/mocks/server'
 
 import { fetchRecentMoviesInJapan } from './fetchMovies'
+
+vi.mock('timers/promises')
+const mockedSetTimeout = vi.mocked(setTimeout)
 
 const dummyTMDBHandler = (dummyMovies: unknown[][]) => {
   return http.get(
@@ -43,6 +47,7 @@ describe('fetchMovies', () => {
     const response = await fetchRecentMoviesInJapan()
     // assert
     expect(response).toEqual(ok(dummyMovies.flat()))
+    expect(mockedSetTimeout).toHaveBeenCalledTimes(0)
   })
   test('TMDB APIが2ページ以上を返す場合はページネーションして返す', async () => {
     // arrange
@@ -65,10 +70,11 @@ describe('fetchMovies', () => {
     const response = await fetchRecentMoviesInJapan()
     // assert
     expect(response).toEqual(ok(dummyMovies.flat()))
+    expect(mockedSetTimeout).toHaveBeenCalledTimes(1)
   })
   test('TMDB APIが11ページ以上ある場合は10ページまで取得して返す', async () => {
     // arrange
-    const dummyMovies = new Array(11).fill([
+    const dummyMovies = new Array(20).fill([
       {
         title: '映画1',
         release_date: '2021-01-01',
@@ -79,6 +85,7 @@ describe('fetchMovies', () => {
     const response = await fetchRecentMoviesInJapan()
     // assert
     expect(response._unsafeUnwrap().length).toBe(10)
+    expect(mockedSetTimeout).toHaveBeenCalledTimes(9)
   })
   test('TMDB APIがエラーを返す場合はエラーを返す', async () => {
     // arrange
