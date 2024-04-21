@@ -4,7 +4,7 @@ import type { AppContext } from '@/config'
 import type { QueryParams } from '@/lexicon/types/app/bsky/feed/getFeedSkeleton'
 
 // max 15 chars
-export const shortname = 'whats-alf'
+export const shortname = 'movies'
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
   let builder = ctx.db

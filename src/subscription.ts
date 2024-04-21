@@ -1,5 +1,6 @@
 import type { OutputSchema as RepoEvent } from './lexicon/types/com/atproto/sync/subscribeRepos'
 import { isCommit } from './lexicon/types/com/atproto/sync/subscribeRepos'
+import { cache } from './tmdb/cache'
 import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription'
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
@@ -8,13 +9,15 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const ops = await getOpsByType(evt)
 
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
+    const cachedMoviesTitle =
+      cache.get('movies')?.map((movie) => movie.title) ?? []
     const postsToCreate = ops.posts.creates
       .filter((create) => {
-        // only alf-related posts
-        return create.record.text.toLowerCase().includes('alf')
+        return cachedMoviesTitle.some((title) =>
+          create.record.text.includes(title),
+        )
       })
       .map((create) => {
-        // map alf-related posts to a db row
         return {
           uri: create.uri,
           cid: create.cid,
