@@ -1,10 +1,11 @@
 import { CronJob } from 'cron'
 
+import { updateTMDBCache } from './tmdb/cache'
 import { env } from './util/env'
 
 const cronTimes = {
-  // 10秒に1回実行
-  development: '*/10 * * * * *',
+  // 1分に1回実行
+  development: '0 */1 * * * *',
   // 毎日午前0時10分に実行
   production: '0 10 0 * * *',
   // productionと同じ
@@ -15,7 +16,7 @@ export const startCron = () => {
   const job = CronJob.from({
     cronTime: cronTimes[env.NODE_ENV],
     onTick: () => {
-      console.log('CRON実装テスト', new Date())
+      void updateTMDBCache()
     },
     timeZone: 'Asia/Tokyo',
   })
