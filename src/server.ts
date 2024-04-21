@@ -2,6 +2,7 @@ import { DidResolver, MemoryCache } from '@atproto/identity'
 import events from 'events'
 import express from 'express'
 import type http from 'http'
+import morgan from 'morgan'
 
 import type { AppContext, Config } from './config'
 import { startCron } from './cron'
@@ -34,6 +35,7 @@ export class FeedGenerator {
 
   static create(cfg: Config) {
     const app = express()
+    app.use(morgan('tiny'))
     const db = createDb(cfg.sqliteLocation)
     const firehose = new FirehoseSubscription(db, cfg.subscriptionEndpoint)
 
