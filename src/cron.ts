@@ -18,6 +18,8 @@ export const startCron = () => {
     onTick: () => {
       void updateTMDBCache()
     },
+    // 本番環境のみ開始時に実行
+    runOnInit: env.NODE_ENV === 'production',
     timeZone: 'Asia/Tokyo',
   })
   job.start()
