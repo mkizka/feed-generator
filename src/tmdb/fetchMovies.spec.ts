@@ -17,7 +17,7 @@ const dummyTMDBHandler = (dummyMovies: unknown[][]) => {
       const url = new URL(request.url)
       const page = Number(url.searchParams.get('page'))
       expect(url.searchParams.get('release_date.gte')).toBe('2023-12-30')
-      expect(url.searchParams.get('release_date.lte')).toBe('2024-01-06')
+      expect(url.searchParams.get('release_date.lte')).toBe('2024-01-29')
       return HttpResponse.json({
         page,
         results: dummyMovies[page - 1],
@@ -29,7 +29,7 @@ const dummyTMDBHandler = (dummyMovies: unknown[][]) => {
 }
 
 vi.useFakeTimers()
-vi.setSystemTime(new Date('2024-01-06'))
+vi.setSystemTime(new Date('2024-01-29'))
 
 describe('fetchMovies', () => {
   test('TMDB APIを叩いて映画の配列を返す', async () => {

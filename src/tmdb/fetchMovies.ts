@@ -26,7 +26,7 @@ const fetchRecentMoviesInJapanByPage = async (page: number) => {
   const url = new URL('https://api.themoviedb.org/3/discover/movie')
   url.searchParams.set('language', 'ja-JP')
   url.searchParams.set('region', 'JP')
-  url.searchParams.set('release_date.gte', getJSTDateText(-7))
+  url.searchParams.set('release_date.gte', getJSTDateText(-30))
   url.searchParams.set('release_date.lte', getJSTDateText(0))
   url.searchParams.set('page', String(page))
   logger.info(`fetch: ${url.toString()}`)
