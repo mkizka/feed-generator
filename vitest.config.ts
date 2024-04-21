@@ -8,8 +8,5 @@ export default defineConfig({
     restoreMocks: true,
     mockReset: true,
   },
-  plugins: [
-     
-    tsconfigPaths(),
-  ],
+  plugins: [tsconfigPaths()],
 })
