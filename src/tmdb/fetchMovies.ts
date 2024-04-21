@@ -2,23 +2,11 @@ import { err, ok, ResultAsync } from 'neverthrow'
 import { setTimeout } from 'timers/promises'
 
 import { env } from '@/util/env'
+import { createLogger } from '@/util/logger'
 
-type TMDBMovie = {
-  adult: boolean
-  backdrop_path: string
-  genre_ids: number[]
-  id: number
-  original_language: string
-  original_title: string
-  overview: string
-  popularity: number
-  poster_path: string
-  release_date: string
-  title: string
-  video: boolean
-  vote_average: number
-  vote_count: number
-}
+import type { TMDBMovie } from './types'
+
+const logger = createLogger('fetchMovies')
 
 type TMDBMovieResponse = {
   page: number
@@ -41,7 +29,7 @@ const fetchRecentMoviesInJapanByPage = async (page: number) => {
   url.searchParams.set('release_date.gte', getJSTDateText(-7))
   url.searchParams.set('release_date.lte', getJSTDateText(0))
   url.searchParams.set('page', String(page))
-  console.log('fetch', url.toString())
+  logger.info(`fetch: ${url.toString()}`)
   return ResultAsync.fromPromise(
     fetch(url, {
       headers: {

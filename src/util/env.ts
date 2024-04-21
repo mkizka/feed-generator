@@ -4,6 +4,9 @@ import { fromZodError } from 'zod-validation-error'
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('production'),
+  LOG_LEVEL: z
+    .enum(['debug', 'info', 'warn', 'error'])
+    .default(process.env.NODE_ENV === 'production' ? 'info' : 'debug'),
   TMDB_AUTH_TOKEN: z.string(),
 })
 
