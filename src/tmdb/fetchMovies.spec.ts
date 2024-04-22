@@ -16,8 +16,8 @@ const dummyTMDBHandler = (dummyMovies: unknown[][]) => {
     ({ request }) => {
       const url = new URL(request.url)
       const page = Number(url.searchParams.get('page'))
-      expect(url.searchParams.get('release_date.gte')).toBe('2023-12-30')
-      expect(url.searchParams.get('release_date.lte')).toBe('2024-01-29')
+      expect(url.searchParams.get('release_date.gte')).toBe('2023-12-02')
+      expect(url.searchParams.get('release_date.lte')).toBe('2024-01-31')
       return HttpResponse.json({
         page,
         results: dummyMovies[page - 1],
@@ -29,7 +29,7 @@ const dummyTMDBHandler = (dummyMovies: unknown[][]) => {
 }
 
 vi.useFakeTimers()
-vi.setSystemTime(new Date('2024-01-29'))
+vi.setSystemTime(new Date('2024-01-01'))
 
 describe('fetchMovies', () => {
   test('TMDB APIを叩いて映画の配列を返す', async () => {
@@ -38,7 +38,7 @@ describe('fetchMovies', () => {
       [
         {
           title: '映画1',
-          release_date: '2021-01-01',
+          release_date: '2024-01-01',
         },
       ],
     ]
@@ -55,13 +55,13 @@ describe('fetchMovies', () => {
       [
         {
           title: '映画1',
-          release_date: '2021-01-01',
+          release_date: '2024-01-01',
         },
       ],
       [
         {
           title: '映画2',
-          release_date: '2021-01-02',
+          release_date: '2024-01-02',
         },
       ],
     ]
@@ -77,7 +77,7 @@ describe('fetchMovies', () => {
     const dummyMovies = new Array(20).fill([
       {
         title: '映画1',
-        release_date: '2021-01-01',
+        release_date: '2024-01-01',
       },
     ]) as unknown[][]
     server.use(dummyTMDBHandler(dummyMovies))
@@ -86,6 +86,33 @@ describe('fetchMovies', () => {
     // assert
     expect(response._unsafeUnwrap().length).toBe(10)
     expect(mockedSetTimeout).toHaveBeenCalledTimes(9)
+  })
+  test('TMDB APIが日付の範囲外のデータを返した場合はフィルタする', async () => {
+    // arrange
+    const dummyMovies = [
+      [
+        {
+          title: '映画1',
+          release_date: '2024-01-01',
+        },
+        {
+          title: '映画2',
+          // 31日後
+          release_date: '2024-02-01',
+        },
+        {
+          title: '映画1',
+          // 31日前
+          release_date: '2023-12-02',
+        },
+      ],
+    ]
+    server.use(dummyTMDBHandler(dummyMovies))
+    // act
+    const response = await fetchRecentMoviesInJapan()
+    // assert
+    expect(response).toEqual(ok([dummyMovies[0][0]]))
+    expect(mockedSetTimeout).toHaveBeenCalledTimes(0)
   })
   test('TMDB APIがエラーを返す場合はエラーを返す', async () => {
     // arrange

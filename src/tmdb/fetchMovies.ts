@@ -1,3 +1,5 @@
+import { format, isWithinInterval } from 'date-fns'
+import { addDays, addHours } from 'date-fns/fp'
 import { err, ok, ResultAsync } from 'neverthrow'
 import { setTimeout } from 'timers/promises'
 
@@ -15,19 +17,25 @@ type TMDBMovieResponse = {
   total_results: number
 }
 
-const getJSTDateText = (relativeDate: number) => {
-  const date = new Date()
-  date.setDate(date.getDate() + relativeDate)
-  date.setHours(date.getHours() + 9)
-  return date.toISOString().split('T')[0]
+const getJSTDate = (relativeDate: number) => {
+  return ok(new Date())
+    .map(addHours(9))
+    .map(addDays(relativeDate))
+    ._unsafeUnwrap()
 }
 
-const fetchRecentMoviesInJapanByPage = async (page: number) => {
+const fetchRecentMoviesInJapanByPage = async (
+  page: number,
+  options: {
+    start: Date
+    end: Date
+  },
+) => {
   const url = new URL('https://api.themoviedb.org/3/discover/movie')
   url.searchParams.set('language', 'ja-JP')
   url.searchParams.set('region', 'JP')
-  url.searchParams.set('release_date.gte', getJSTDateText(-30))
-  url.searchParams.set('release_date.lte', getJSTDateText(0))
+  url.searchParams.set('release_date.gte', format(options.start, 'yyyy-MM-dd'))
+  url.searchParams.set('release_date.lte', format(options.end, 'yyyy-MM-dd'))
   url.searchParams.set('page', String(page))
   logger.info(`fetch: ${url.toString()}`)
   return ResultAsync.fromPromise(
@@ -56,13 +64,22 @@ const MAX_PAGINATION = 10
 export const fetchRecentMoviesInJapan = async () => {
   let page = 1
   const movies: TMDBMovie[] = []
+  const options = {
+    start: getJSTDate(-30),
+    end: getJSTDate(30),
+  }
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const response = await fetchRecentMoviesInJapanByPage(page)
+    const response = await fetchRecentMoviesInJapanByPage(page, options)
     if (response.isErr()) {
       return err(response.error)
     }
-    movies.push(...response.value.results)
+    movies.push(
+      ...response.value.results.filter(
+        // なぜか期間外の映画が返されることがあるのでフィルタする
+        (movie) => isWithinInterval(movie.release_date, options),
+      ),
+    )
     if (page >= MAX_PAGINATION || page >= response.value.total_pages) {
       break
     }
