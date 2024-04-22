@@ -12,6 +12,7 @@ import { createServer } from './lexicon'
 import describeGenerator from './methods/describe-generator'
 import feedGeneration from './methods/feed-generation'
 import { FirehoseSubscription } from './subscription'
+import { tmdbRouter } from './tmdb/tmdbRouter'
 import wellKnown from './well-known'
 
 export class FeedGenerator {
@@ -62,6 +63,7 @@ export class FeedGenerator {
     describeGenerator(server, ctx)
     app.use(server.xrpc.router)
     app.use(wellKnown(ctx))
+    app.use(tmdbRouter())
 
     return new FeedGenerator(app, db, firehose, cfg)
   }
